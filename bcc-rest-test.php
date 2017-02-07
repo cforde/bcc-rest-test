@@ -14,7 +14,7 @@
  * @package         Bcc_Rest_Test
  */
 
-	
+
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -43,85 +43,125 @@ register_deactivation_hook( __FILE__, 'deactivate_bcc_rest_test' );
 
 /**
  * Verify that the requestor has permission to perform their desired action
- * 
+ *
  */
 function check_permission() {
-	
+
 }
 
 /**
  * Handle the 'event' requests
  */
 function handle_create_event( WP_REST_Request $data ) {
-	
-	$response = array( 'status' => 'ok', 'message' => 'This was a create event request' );
+	$status = 201;
+
+	$response = array(
+		'code' 		=> 'event_create',
+		'message' 	=> 'New event created',
+		'data'		=> array(
+			'status' 	=> $status,
+			'id'		=> 1
+		)
+	);
+
+	http_response_code( $status );
     return rest_ensure_response( $response );
 }
 function handle_read_event( WP_REST_Request $data ) {
-	
-	$response = array( 'status' => 'ok', 'message' => 'This was a read event request' );
+	$status = 200;
+
+	$response = array(
+		'code' 		=> 'event_read',
+		'message' 	=> '',
+		'data'		=> array(
+			'status' 	=> $status,
+			'event'		=> array(
+				'id'		=> 1,
+				'name'		=> 'The Main Event',
+				'details'	=> 'Happening somewhere at some time'
+			)
+		)
+	);
+
     return rest_ensure_response( $response );
 }
 function handle_edit_event( WP_REST_Request $data ) {
-	
-	$response = array( 'status' => 'ok', 'message' => 'This was an edit event request' );
+	$status = 200;
+
+	$response = array(
+		'code' 		=> 'event_edit',
+		'message' 	=> 'Event updated',
+		'data'		=> array(
+			'status' 	=> $status
+		)
+	);
+
     return rest_ensure_response( $response );
 }
 function handle_delete_event( WP_REST_Request $data ) {
-	
-	$response = array( 'status' => 'ok', 'message' => 'This was a delete event request' );
+	$status = 204;
+
+	$response = array(
+		'code' 		=> 'event_delete',
+		'message' 	=> 'Event deleted',
+		'data'		=> array(
+			'status' 	=> $status
+		)
+	);
+
+	http_response_code( $status );
     return rest_ensure_response( $response );
 }
 
- 
+
 /**
  * Handle the 'location' requests
  */
 function handle_create_location( WP_REST_Request $data ) {
-	
+
 	$response = array( 'status' => 'ok', 'message' => 'This was a create location request' );
     return rest_ensure_response( $response );
 }
 function handle_read_location( WP_REST_Request $data ) {
-	
+
 	$response = array( 'status' => 'ok', 'message' => 'This was a read location request' );
     return rest_ensure_response( $response );
 }
 function handle_edit_location( WP_REST_Request $data ) {
-	
+
 	$response = array( 'status' => 'ok', 'message' => 'This was an edit location request' );
     return rest_ensure_response( $response );
 }
 function handle_delete_location( WP_REST_Request $data ) {
-	
+
 	$response = array( 'status' => 'ok', 'message' => 'This was a delete location request' );
     return rest_ensure_response( $response );
 }
- 
+
 /**
  * Handle the 'recurring-event' requests
  */
 function handle_create_recurring_event( WP_REST_Request $data ) {
-	
+
 	$response = array( 'status' => 'ok', 'message' => 'This was a create recurring-event request' );
     return rest_ensure_response( $response );
 }
 function handle_read_recurring_event( WP_REST_Request $data ) {
-	
+
 	$response = array( 'status' => 'ok', 'message' => 'This was a read recurring-event request' );
     return rest_ensure_response( $response );
 }
 function handle_edit_recurring_event( WP_REST_Request $data ) {
-	
+
 	$response = array( 'status' => 'ok', 'message' => 'This was an edit recurring-event request' );
     return rest_ensure_response( $response );
 }
 function handle_delete_recurring_event( WP_REST_Request $data ) {
-	
+
 	$response = array( 'status' => 'ok', 'message' => 'This was a delete recurring-event request' );
     return rest_ensure_response( $response );
 }
- 
+
 /**
  * Register our routes for the new endpoints.
  */
@@ -143,9 +183,9 @@ function register_routes() {
 		array(
 	        'methods'  => WP_REST_Server::DELETABLE,
 	        'callback' => 'handle_delete_event'
-	    ) 
+	    )
 	) );
-	
+
     register_rest_route( 'wp/v2', '/location', array(
 		array(
 	        'methods'  => WP_REST_Server::CREATABLE,
@@ -162,10 +202,10 @@ function register_routes() {
 		array(
 	        'methods'  => WP_REST_Server::DELETABLE,
 	        'callback' => 'handle_delete_location'
-	    ) 
-		 
+	    )
+
 	) );
-	
+
     register_rest_route( 'wp/v2', '/recurring-event', array(
 		array(
 	        'methods'  => WP_REST_Server::CREATABLE,
@@ -183,11 +223,9 @@ function register_routes() {
 	        'methods'  => WP_REST_Server::DELETABLE,
 	        'callback' => 'handle_delete_recurring_event'
 	    ),
-		
+
 	) );
 }
- 
- 
+
+
 add_action( 'rest_api_init', 'register_routes' );
-
-
